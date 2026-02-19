@@ -37,34 +37,27 @@ $(window).resize(function() {
 	};
 })(jQuery);
 
+function toArabicNumerals(num) {
+    var arabicNumerals = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+    return num.toString().split('').map(function(digit) {
+        return arabicNumerals[parseInt(digit)];
+    }).join('');
+}
+
 function timeElapse(date){
-	var current = Date();
-	var seconds = (Date.parse(current) - Date.parse(date)) / 1000;
+	var current = new Date();
+	var seconds = (Date.parse(date) - Date.parse(current)) / 1000;
 
-	var years = Math.floor(seconds / (365 * 3600 * 24));
-
-  seconds = seconds % (365 * 3600 * 24);
-  var days = Math.floor(seconds / (3600 * 24));
-  if (days < 10) {
-    days = "0" + days;
-  }
-
-	seconds = seconds % (3600 * 24);
-	var hours = Math.floor(seconds / 3600);
-	if (hours < 10) {
-		hours = "0" + hours;
+	if (seconds <= 0) {
+		$("#clock").html(" <span class=\"digit\">" + toArabicNumerals(0) + " أيام " + toArabicNumerals(0) + " ساعات " + toArabicNumerals(0) + " دقائق</span>");
+		return;
 	}
 
-	seconds = seconds % 3600;
-	var minutes = Math.floor(seconds / 60);
-	if (minutes < 10) {
-		minutes = "0" + minutes;
-	}
+	var days = Math.floor(seconds / (3600 * 24));
+	var hours = Math.floor((seconds % (3600 * 24)) / 3600);
+	var minutes = Math.floor((seconds % 3600) / 60);
+	var sec = Math.floor(seconds % 60);
 
-	seconds = seconds % 60;
-	if (seconds < 10) {
-		seconds = "0" + seconds;
-	}
-	var result = " <span class=\"digit\">" + years + " 年 <span class=\"digit\">" + days + "</span> 天 <span class=\"digit\">" + hours + "</span> 小时 <span class=\"digit\">" + minutes + "</span> 分钟 <span class=\"digit\">" + seconds + "</span> 秒";
+	var result = " <span class=\"digit\">" + toArabicNumerals(days) + " أيام <span class=\"digit\">" + toArabicNumerals(hours) + "</span> ساعات <span class=\"digit\">" + toArabicNumerals(minutes) + "</span> دقائق <span class=\"digit\">";
 	$("#clock").html(result);
 }

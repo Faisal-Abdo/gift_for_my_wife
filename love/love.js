@@ -18,6 +18,10 @@
         return z < 0;
     }
 
+    function incircle(x, y, r) {
+        return x * x + y * y <= r * r;
+    }
+
     Point = function(x, y) {
         this.x = x || 0;
         this.y = y || 0;
@@ -73,6 +77,19 @@
                 var angle = i* angleChange*2.199;
                 x = radius * Math.cos(angle) + 2;
                 y = radius * Math.sin(angle) + 2;
+                points.push(new Point(x, y));
+            }
+            this.points = points;
+            this.length = points.length;
+        } else if(type == "circle") {
+            var radius = 15;
+            var numPoints = 50;
+            var angleChange = 360 / numPoints;
+
+            for (i = 0; i < numPoints; i += 1) {
+                var angle = i * angleChange * Math.PI / 180;
+                x = radius * Math.cos(angle);
+                y = radius * Math.sin(angle);
                 points.push(new Point(x, y));
             }
             this.points = points;
@@ -362,7 +379,7 @@
             while (true) {
                 x = random(20, width - 20);
                 y = random(20, height - 20);
-                if (inheart(x - width / 2, height - (height - 40) / 2 - y, radius)) {
+                if (incircle(x - width / 2, height - (height - 40) / 2 - y, radius)) {
                     return new Bloom(this, new Point(x, y), figure, color, alpha, angle, scale, place, speed);
                 }
             }
